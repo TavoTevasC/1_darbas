@@ -1,4 +1,4 @@
-﻿#ifndef MYLIB_H_INCLUDED
+#ifndef MYLIB_H_INCLUDED
 #define MYLIB_H_INCLUDED
 
 #include <iostream>
@@ -10,11 +10,7 @@
 #include <random>
 #include <fstream>
 #include <sstream>
-
-
-
-
-
+#include <stdexcept>   
 
 using std::endl;
 using std::cin;
@@ -34,14 +30,7 @@ using std::ifstream;
 using std::cerr;
 using std::getline;
 using std::stringstream;
-
-
-
-
-
-
-
-
+using std::runtime_error;
 
 class Studentas {
     string vardas;
@@ -49,18 +38,16 @@ class Studentas {
     vector<int> nd;
     int egz{};
     double galutinisVidurkis{};
-	double galutinisMediana{};
+    double galutinisMediana{};
 
 public:
     // Konstruktoriai
     Studentas();
-
     Studentas(string A, string B, vector<int> C, int D);
 
     // Geteriai
-    string getVardas() const;
-    string getPavarde() const;
-
+    string getVardas() const { return vardas; }
+    string getPavarde() const { return pavarde; }
 
     // Kopijavimo konstruktorius
     Studentas(const Studentas& other);
