@@ -66,15 +66,15 @@ void Studentas::ivedimas() {
     }
 
     nd.resize(n);
-    cout << "Iveskite " << n << " pazymius: ";
+    cout << "Iveskite " << n << " pazymius (0-10): ";
     for (int i = 0; i < n; i++) {
-        if (!(cin >> nd[i])) {
+        if (!(cin >> nd[i]) || nd[i] < 0 || nd[i] > 10) {
             throw runtime_error("Netinkama pazymio ivestis!");
         }
     }
 
-    cout << "Iveskite egzamino pazymi: ";
-    if (!(cin >> egz)) {
+    cout << "Iveskite egzamino pazymi (0-10): ";
+    if (!(cin >> egz) || egz < 0 || egz > 10) {
         throw runtime_error("Netinkama egzamino ivestis!");
     }
 

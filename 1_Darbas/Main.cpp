@@ -5,9 +5,9 @@ int main() {
 
     try {
         cout << "Pasirinkite duomenu ivedimo buda:\n"
-             << "1 - rankiniu budu\n"
-             << "2 - generuoti atsitiktinius duomenis\n"
-             << "3 - nuskaityti is failo (kursiokai.txt)\n";
+             << "1 - Rankiniu budu\n"
+             << "2 - Generuoti atsitiktinius duomenis\n"
+             << "3 - Nuskaityti is failo (kursiokai.txt)\n";
 
         int budas;
         if (!(cin >> budas)) {
