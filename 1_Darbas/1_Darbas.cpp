@@ -1,4 +1,4 @@
-#include "Mylib.h"
+#include "Studentas.h"
 
 // Konstruktoriai
 Studentas::Studentas() {
