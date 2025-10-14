@@ -1,5 +1,5 @@
-﻿Pavarde     Vardas      ND1  ND2   ND3  ND4  ND5  Egzaminas
+﻿Pavarde	 Vardas         ND1  ND2   ND3  ND4  ND5  Egzaminas
 Rimas	 Kurtinaitis    8    9     10   6    10   9
-Arvydas		 Sabonis    7    10    8    5    4    6
-Jonas		Valanciunas 6    5     7    8    9    5
-Tomas	  Delininkaitis 9    8     7    6    5    8
+Arvydas  Sabonis    	7    10    8    5    4    6
+Jonas	 Valanciunas 	6    5     7    8    9    5
+Tomas	 Delininkaitis  9    8     7    6    5    8

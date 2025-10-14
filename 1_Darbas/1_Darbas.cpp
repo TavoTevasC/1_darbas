@@ -142,3 +142,65 @@ vector<Studentas> Studentas::nuskaitytiIsFailo(const string& failoVardas) {
     }
     return grupe;
 }
+
+// Duomenų generavimas į failą
+void Generatorius::generuotiFaila(const string& failoVardas, size_t kiekStud, int kiekNd) {
+    ofstream out(failoVardas);
+    if (!out.is_open()) {
+        throw runtime_error("Nepavyko sukurti failo: " + failoVardas);
+    }
+
+    out << left << setw(25) << "Vardas"
+        << setw(25) << "Pavarde";
+    for (int i = 1; i <= kiekNd; i++) {
+        out << setw(10) << ("ND" + to_string(i));
+    }
+    out << setw(10) << "Egzaminas" << "\n";
+
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<> dist(1, 10);
+
+    for (size_t i = 1; i <= kiekStud; i++) {
+        out << left << setw(25) << ("Vardas" + to_string(i))
+            << setw(25) << ("Pavarde" + to_string(i));
+        for (int j = 0; j < kiekNd; j++) {
+            out << setw(10) << dist(gen);
+        }
+        out << setw(10) << dist(gen) << "\n";
+    }
+
+    out.close();
+    cout << "Sugeneruotas failas: " << failoVardas << " su " << kiekStud << " studentu ir " << kiekNd << " namu darbu." << endl;
+}
+
+void Generatorius::generuotiVisus() {
+    generuotiFaila("studentai_1000.txt", 1000);
+    generuotiFaila("studentai_10000.txt", 10000);
+    generuotiFaila("studentai_100000.txt", 100000);
+    generuotiFaila("studentai_1000000.txt", 1000000);
+    generuotiFaila("studentai_10000000.txt", 10000000);
+}
+
+// Surušiuotų studentų sąrašo išvedimas į failus
+void isvestiIFaila(const vector<Studentas>& sarasas, const string& failoVardas) {
+    ofstream out(failoVardas);
+    if (!out.is_open()) {
+        throw runtime_error("Nepavyko sukurti failo: " + failoVardas);
+    }
+
+    out << left << setw(25) << "Vardas"
+        << setw(25) << "Pavarde"
+        << setw(20) << "Galutinis (Vid.)" << "\n";
+    out << string(70, '-') << "\n";
+
+    for (const auto& s : sarasas) {
+        out << left << setw(25) << s.getVardas()
+            << setw(25) << s.getPavarde()
+            << setw(20) << fixed << setprecision(2) << s.getGalutinisVidurkis()
+            << "\n";
+    }
+
+    out.close();
+    cout << "Failas \"" << failoVardas << "\" sekmingai sukurtas." << endl;
+}

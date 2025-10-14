@@ -18,6 +18,7 @@ using std::cout;
 using std::string;
 using std::vector;
 using std::left;
+using std::right;
 using std::setw;
 using std::fixed;
 using std::setprecision;
@@ -27,9 +28,11 @@ using std::random_device;
 using std::mt19937;
 using std::uniform_int_distribution;
 using std::ifstream;
+using std::ofstream;
 using std::cerr;
 using std::getline;
 using std::stringstream;
 using std::runtime_error;
+using std::to_string;
 
 #endif // MYLIB_H_INCLUDED
