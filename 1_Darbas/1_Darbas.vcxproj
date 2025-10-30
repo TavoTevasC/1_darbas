@@ -130,6 +130,8 @@
     <Text Include="kursiokai.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Konteineriai.h" />
+    <ClInclude Include="Memory.h" />
     <ClInclude Include="Mylib.h" />
     <ClInclude Include="Studentas.h" />
     <ClInclude Include="Timer.h" />

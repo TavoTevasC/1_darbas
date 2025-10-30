@@ -10,7 +10,12 @@
 #include <random>
 #include <fstream>
 #include <sstream>
-#include <stdexcept>   
+#include <stdexcept>
+#include <list>
+#include <deque>
+#include <iterator>
+#include <type_traits>
+
 
 using std::endl;
 using std::cin;
@@ -34,5 +39,10 @@ using std::getline;
 using std::stringstream;
 using std::runtime_error;
 using std::to_string;
+using std::list;
+using std::deque;
+using std::is_same;
+using std::stable_partition;
+using std::make_move_iterator;
 
 #endif // MYLIB_H_INCLUDED
