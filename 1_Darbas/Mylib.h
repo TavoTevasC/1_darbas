@@ -15,6 +15,7 @@
 #include <deque>
 #include <iterator>
 #include <type_traits>
+#include <limits>
 
 
 using std::endl;
@@ -44,5 +45,7 @@ using std::deque;
 using std::is_same;
 using std::stable_partition;
 using std::make_move_iterator;
+using std::numeric_limits;
+using std::streamsize;
 
 #endif // MYLIB_H_INCLUDED
