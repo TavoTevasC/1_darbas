@@ -204,3 +204,4 @@ void isvestiIFaila(const vector<Studentas>& sarasas, const string& failoVardas) 
     out.close();
     cout << "Failas \"" << failoVardas << "\" sekmingai sukurtas." << endl;
 }
+

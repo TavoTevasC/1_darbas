@@ -2,6 +2,7 @@
 #define STUDENTAS_H_INCLUDED
 #include "Mylib.h"
 #include "Timer.h"
+#include "Memory.h"
 
 class Studentas {
     string vardas;
