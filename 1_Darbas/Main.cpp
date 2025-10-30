@@ -1,5 +1,8 @@
 #include "Studentas.h"
-
+#define NOMINMAX
+#ifdef max
+#undef max
+#endif
 
 
 // Generuoti N studentų duomenis į konteinerį
@@ -75,200 +78,233 @@ void run_strategy2(Container orig, const string& name) {
     cout << "  Laikas: " << elapsed << " s, Papildomos atminties poreikis: " << (memAfter >= memBefore ? memAfter - memBefore : 0) << " KB\n";
 }
 
+
 int main() {
     vector<Studentas> grupe;
     vector<Studentas> nuskriaustukai;
     vector<Studentas> galvociai;
-	Timer time;
-	double tGen = 0, tRead = 0, tSort = 0, tWrite = 0 ;
-	cout << "Programa pradeda darba..." << endl;
+    Timer time;
+    double tGen = 0, tRead = 0, tSort = 0, tWrite = 0;
+
+    cout << "Programa pradeda darba..." << endl;
+
     try {
-        cout << "Pasirinkite duomenu ivedimo buda:\n"
-             << "1 - Rankiniu budu\n"
-             << "2 - Generuoti atsitiktinius duomenis\n"
-             << "3 - Nuskaityti is failo (kursiokai.txt)\n"
-             << "4 - Generuoti duomenis i failus (studentai_1000.txt, studentai_10000.txt, ...)\n"
-             << "5 - Vykdyti spartos testavima (vector, deque, list, abi strategijos)\n"
-		     << "Kad pradeti darba, iveskite pasirinkimo numeri ir paspauskite (ENTER)\n";
+        bool veikia = true;
+        while (veikia) {
+            cout << "\nPasirinkite duomenu ivedimo buda:\n"
+                << "1 - Rankiniu budu\n"
+                << "2 - Generuoti atsitiktinius duomenis\n"
+                << "3 - Nuskaityti is failo (kursiokai.txt)\n"
+                << "4 - Generuoti duomenis i failus (studentai_1000.txt, studentai_10000.txt, ...)\n"
+                << "5 - Vykdyti spartos testavima (vector, deque, list, abi strategijos)\n"
+                << "0 - Baigti darba\n"
+                << "Kad pradeti darba, iveskite pasirinkimo numeri ir paspauskite (ENTER): ";
 
-        int budas;
-        if (!(cin >> budas)) {
-            throw runtime_error("Netinkama ivestis!");
-        }
-
-        if (budas == 1) {
-            int kiek;
-            cout << "Kiek studentu ivesite? ";
-            if (!(cin >> kiek) || kiek <= 0) throw runtime_error("Neteisingas kiekis!");
-            grupe.resize(kiek);
-
-            for (int i = 0; i < kiek; i++) {
-                cout << "\nStudentas #" << i + 1 << ":\n";
-                grupe[i].ivedimas();
+            int budas;
+            if (!(cin >> budas)) {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cerr << "Netinkama ivestis! Bandykite dar karta.\n";
+                continue;
             }
-        }
-        else if (budas == 2) {
-            int kiek;
-            cout << "Kiek studentu generuoti? ";
-            if (!(cin >> kiek) || kiek <= 0) throw runtime_error("Neteisingas kiekis!");
-            grupe.resize(kiek);
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
 
-            for (int i = 0; i < kiek; i++) {
-                cout << "\nStudentas #" << i + 1 << ":\n";
-                grupe[i].generuotiDuomenis();
-            }
-        }
-        else if (budas == 3) {
-            grupe = Studentas::nuskaitytiIsFailo("kursiokai.txt");
-            if (grupe.empty()) {
-                cout << "Nera duomenu nuskaitymui is failo." << endl;
-                return 1;
-            }
-        }
-        else if (budas == 4) {
-			time.reset();
-            Generatorius::generuotiVisus();
-            tGen = time.elapsed();
-            cout << "Duomenys sugeneruoti i failus." << endl;
-			cout << "Nuskaitymas is failu..." << endl;
-			time.reset();
-            grupe = Studentas::nuskaitytiIsFailo("studentai_1000.txt");
-            grupe = Studentas::nuskaitytiIsFailo("studentai_10000.txt");
-            grupe = Studentas::nuskaitytiIsFailo("studentai_100000.txt");
-            grupe = Studentas::nuskaitytiIsFailo("studentai_1000000.txt");
-            grupe = Studentas::nuskaitytiIsFailo("studentai_10000000.txt");
-			tRead = time.elapsed();
-            
-            if (grupe.empty()) {
-                cout << "Nera duomenu nuskaitymui is failo." << endl;
-                return 1;
-			}
-            
-		}
-        else if (budas == 5) {
-			// Testavimas konteineriu efektyvumo
-			vector<size_t> sizes = { 1000, 10000, 100000, 1000000, 10000000 }; // Pasirinkit konteinerio dydi priklausomai nuo jusu kompiuterio galimybiu
-            for (size_t n : sizes) {
-                cout << "\n=== Spartos testavimas: n = " << n << " ===\n";
-                // Vector
-                auto vec = generateStudents<vector<Studentas>>(n);
-                for (auto c : {1,2}) {
-                    if (c==1) run_strategy1<vector<Studentas>>(vec, "vector");
-                    else run_strategy2<vector<Studentas>>(vec, "vector");
+            switch (budas) {
+				// Išeiti iš programos
+            case 0:
+                cout << "Programa baigia darba. Iki!" << endl;
+                veikia = false;
+                break;
+
+                // Rankinis įvedimas 
+            case 1: {
+                int kiek;
+                cout << "Kiek studentu ivesite? ";
+                if (!(cin >> kiek) || kiek <= 0) {
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    throw runtime_error("Neteisinga ivestis! Programa baigia darba.");
+                }
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                grupe.resize(kiek);
+                for (int i = 0; i < kiek; i++) {
+                    cout << "\nStudentas #" << i + 1 << ":\n";
+                    grupe[i].ivedimas();
                 }
 
-                // Deque
-                auto deq = generateStudents<deque<Studentas>>(n);
-                for (auto c : {1,2}) {
-                    if (c==1) run_strategy1<deque<Studentas>>(deq, "deque");
-                    else run_strategy2<deque<Studentas>>(deq, "deque");
+                // Lentelės antraštė
+                cout << "\n"
+                    << left << setw(15) << "Vardas"
+                    << setw(15) << "Pavarde"
+                    << setw(18) << "Galutinis (Vid.)"
+                    << setw(18) << "Galutinis (Med.)"
+                    << "\n-------------------------------------------------------------\n";
+
+                // Rūšiavimas pagal vardą
+                sort(grupe.begin(), grupe.end(),
+                    [](const Studentas& a, const Studentas& b) {
+                        return a.getVardas() < b.getVardas();
+                    });
+
+                for (const auto& s : grupe)
+                    s.isvedimas();
+                break;
+            }
+
+                  // Atsitiktinis generavimas
+            case 2: {
+                int kiek;
+                cout << "Kiek studentu generuoti? ";
+                if (!(cin >> kiek) || kiek <= 0) {
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    throw runtime_error("Neteisinga ivestis! Programa baigia darba.");
+                }
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                grupe.resize(kiek);
+                for (int i = 0; i < kiek; i++) {
+                    grupe[i].generuotiDuomenis();
                 }
 
-                // List
-                auto lst = generateStudents<list<Studentas>>(n);
-                for (auto c : {1,2}) {
-                    if (c==1) run_strategy1<list<Studentas>>(lst, "list");
-                    else run_strategy2<list<Studentas>>(lst, "list");
+                cout << "\nSugeneruoti studentu duomenys:\n";
+                cout << left << setw(15) << "Vardas"
+                    << setw(15) << "Pavarde"
+                    << setw(18) << "Galutinis (Vid.)"
+                    << setw(18) << "Galutinis (Med.)"
+                    << "\n-------------------------------------------------------------\n";
+
+                sort(grupe.begin(), grupe.end(),
+                    [](const Studentas& a, const Studentas& b) {
+                        return a.getVardas() < b.getVardas();
+                    });
+
+                for (const auto& s : grupe)
+                    s.isvedimas();
+                break;
+            }
+
+                  // Nuskaitymas iš failo
+            case 3: {
+                grupe = Studentas::nuskaitytiIsFailo("kursiokai.txt");
+                if (grupe.empty()) {
+                    cout << "Nera duomenu nuskaitymui is failo." << endl;
+                    break;
                 }
+
+                cout << "\nDuomenys nuskaityti is failo:\n";
+                cout << left << setw(15) << "Vardas"
+                    << setw(15) << "Pavarde"
+                    << setw(18) << "Galutinis (Vid.)"
+                    << setw(18) << "Galutinis (Med.)"
+                    << "\n-------------------------------------------------------------\n";
+
+                sort(grupe.begin(), grupe.end(),
+                    [](const Studentas& a, const Studentas& b) {
+                        return a.getVardas() < b.getVardas();
+                    });
+
+                for (const auto& s : grupe)
+                    s.isvedimas();
+                break;
             }
 
-            cout << "Testavimas baigtas." << endl;
-            return 0;
-        }
-        else {
-            throw runtime_error("Neteisingas pasirinkimas!");
-        }
+                  // Generavimas į failus
+            case 4: {
+                time.reset();
+                Generatorius::generuotiVisus();
+                tGen = time.elapsed();
+                cout << "Duomenys sugeneruoti i failus." << endl;
 
-        
-        
-        if (budas != 4) {
-            // Lentelės antraštė
-            cout << "\n"
-                << left << setw(15) << "Vardas"
-                << setw(15) << "Pavarde"
-                << setw(18) << "Galutinis (Vid.)"
-                << setw(18) << "Galutinis (Med.)"
-                << "\n-------------------------------------------------------------\n";
-
-            // Rusiavimas pagal vardą 
-            sort(grupe.begin(), grupe.end(),
-                [](const Studentas& a, const Studentas& b) {
-                    return a.getVardas() < b.getVardas();
-                }); 
-        }
-
-        if (budas != 4) {
-            for (const auto& s : grupe) {
-                s.isvedimas();
-                
-            }
-            
-        }
-
-        else {
-			time.reset();
-            for (auto& s : grupe) {
-                s.skaiciuotiGalutinis();
-				if (s.getGalutinisVidurkis() < 5.0) // Studentų rusiavimas į dvi grupes
-                    nuskriaustukai.push_back(s);
-                else
-                    galvociai.push_back(s);
-            }
-			tSort = time.elapsed();
-		}
-        
-        if (budas == 4) {
-			time.reset();
-            isvestiIFaila(nuskriaustukai, "nuskriaustukai.txt"); // Surušiuotų studentų išvedimas į failą (galutinis < 5)
-            isvestiIFaila(galvociai, "galvociai.txt"); // Surušiuotų studentų išvedimas į failą (galutinis >= 5)
-			tWrite = time.elapsed();
-            cout << "Failu kurimas uztruko " << tGen << " sekundziu." << endl;
-			cout << "Nuskaitymas is failu uztruko " << tRead << " sekundziu." << endl;
-			cout << "Studentu rusiavimas i dvi grupes uztruko " << tSort << " sekundziu." << endl;
-			cout << "Surusiuotu studentu isvedimas i failus uztruko " << tWrite << " sekundziu." << endl;
-            cout << "Ar atlikti pakartotina sukurtu failu testavima? (1 - Taip, 0 - Ne): ";
-            int test;
-            if (!(cin >> test)) {
-                throw runtime_error("Netinkama ivestis!");
-            }
-
-            if (test == 1) {
                 cout << "Nuskaitymas is failu..." << endl;
-				time.reset();
+                time.reset();
                 grupe = Studentas::nuskaitytiIsFailo("studentai_1000.txt");
                 grupe = Studentas::nuskaitytiIsFailo("studentai_10000.txt");
                 grupe = Studentas::nuskaitytiIsFailo("studentai_100000.txt");
                 grupe = Studentas::nuskaitytiIsFailo("studentai_1000000.txt");
                 grupe = Studentas::nuskaitytiIsFailo("studentai_10000000.txt");
-				tRead = time.elapsed();
+                tRead = time.elapsed();
 
-				time.reset();
+                if (grupe.empty()) {
+                    cout << "Nera duomenu nuskaitymui is failo." << endl;
+                    break;
+                }
+
+                time.reset();
                 for (auto& s : grupe) {
                     s.skaiciuotiGalutinis();
-                    if (s.getGalutinisVidurkis() < 5.0) // Studentų rusiavimas į dvi grupes
+                    if (s.getGalutinisVidurkis() < 5.0)
                         nuskriaustukai.push_back(s);
                     else
                         galvociai.push_back(s);
                 }
-				tSort = time.elapsed();
-				time.reset();
-                isvestiIFaila(nuskriaustukai, "nuskriaustukai.txt"); // Surušiuotų studentų išvedimas į failą (galutinis < 5)
-                isvestiIFaila(galvociai, "galvociai.txt"); // Surušiuotų studentų išvedimas į failą (galutinis >= 5)
-				tWrite = time.elapsed();
-                cout << "Nuskaitymas is failu uztruko " << tRead << " sekundziu." << endl;
-                cout << "Studentu rusiavimas i dvi grupes uztruko " << tSort << " sekundziu." << endl;
-                cout << "Surusiuotu studentu isvedimas i failus uztruko " << tWrite << " sekundziu." << endl;
+                tSort = time.elapsed();
 
+                time.reset();
+                isvestiIFaila(nuskriaustukai, "nuskriaustukai.txt");
+                isvestiIFaila(galvociai, "galvociai.txt");
+                tWrite = time.elapsed();
 
-            }
-            else if (test == 0) {
-				cout << "Programa baige darba." << endl;
-            } 
-            else {
-				throw runtime_error("Neteisingas pasirinkimas!");
+                cout << "Failu kurimas uztruko " << tGen << " s.\n";
+                cout << "Nuskaitymas uztruko " << tRead << " s.\n";
+                cout << "Rusiavimas uztruko " << tSort << " s.\n";
+                cout << "Isvedimas i failus uztruko " << tWrite << " s.\n";
+                break;
             }
 
-            
+                  
+            case 5: {
+                // Testavimas konteineriu efektyvumo
+                vector<size_t> sizes = { 1000, 10000, 100000, 1000000, 10000000 };
+                for (size_t n : sizes) {
+                    cout << "\n=== Spartos testavimas: n = " << n << " ===\n";
+                    // Vector
+                    auto vec = generateStudents<vector<Studentas>>(n);
+                    run_strategy1(vec, "vector");
+                    run_strategy2(vec, "vector");
+
+                    // Deque
+                    auto deq = generateStudents<deque<Studentas>>(n);
+                    run_strategy1(deq, "deque");
+                    run_strategy2(deq, "deque");
+
+                    // List
+                    auto lst = generateStudents<list<Studentas>>(n);
+                    run_strategy1(lst, "list");
+                    run_strategy2(lst, "list");
+                }
+                cout << "Testavimas baigtas.\n";
+                break;
+            }
+
+                  // Neteisingas pasirinkimas
+            default:
+                cout << "Neteisingas pasirinkimas! Bandykite dar karta.\n";
+                break;
+            }
+
+			// Ar tęsti darbą?
+            if (veikia) {
+                cout << "\nAr norite atlikti dar viena operacija? (1 - Taip, 0 - Ne): ";
+                int testi;
+                if (!(cin >> testi)) {
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    cerr << "Netinkama ivestis! Programa baigia darba.\n";
+                    break;
+                }
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+                if (testi == 0) {
+                    veikia = false;
+                    cout << "Programa baigia darba. Iki!" << endl;
+                }
+                else {
+                    // išvalom senus duomenis tarp operacijų
+                    grupe.clear();
+                    galvociai.clear();
+                    nuskriaustukai.clear();
+                }
+            }
         }
 
     }
@@ -279,3 +315,4 @@ int main() {
 
     return 0;
 }
+

@@ -1,4 +1,5 @@
 ﻿#pragma once
+
 #ifdef _WIN32
 #include <windows.h>
 #include <psapi.h>
@@ -31,4 +32,4 @@ static size_t getProcessMemoryKB() {
     }
     return 0;
 #endif
-}
+} 
